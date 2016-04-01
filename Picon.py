@@ -14,7 +14,7 @@ class Picon:
 		self.tmpPng=zipFile.extract(self.path,"/tmp")
 		self.png=LoadPixmap(self.tmpPng)
 
-		self.tipoPicon=self.tmpPng.split("/")[1]
+		self.tipoPicon=self.tmpPng.split("/")[2]
 
 	def getPiconName(self):
 		# replace("#SERVICE ", "").split("::")[0].replace(":", "_")+".png";

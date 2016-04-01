@@ -1,4 +1,4 @@
-_version = "2.1"
+_version = "2.2"
 _plugindir = "/usr/lib/enigma2/python/Plugins/Extensions/GeradorPicons"
 _title = "Gerador de Picons"
 _developer = "gravatasufoca"

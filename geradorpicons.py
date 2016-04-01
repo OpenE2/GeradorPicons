@@ -23,11 +23,29 @@ config.plugins.Channel.pasta = ConfigDirectory(default="/usr/share/enigma2/picon
 
 # Class EasyBouquetScreen
 class PrincipalScreen(ConfigListScreen, Screen):
+
+	skin="""
+		<screen name="PrincipalScreen" position="267,110" size="723,500" title="">
+		    <widget name="config" position="30,51" size="657,207" scrollbarMode="showOnDemand" backgroundColor="header" transparent="1" />
+		    <ePixmap pixmap="skin_default/buttons/red.png" position="131,460" size="26,26" alphatest="on" />
+		    <widget source="key_red" render="Label" position="166,460" size="220,28" backgroundColor="darkgrey" zPosition="2" transparent="1" foregroundColor="grey" font="Regular;24" halign="left" />
+
+		    <ePixmap pixmap="skin_default/buttons/green.png" position="415,460" size="26,26" alphatest="on" />
+		    <widget source="key_green" render="Label" position="450,460" size="220,28" backgroundColor="darkgrey" zPosition="2" transparent="1" foregroundColor="grey" font="Regular;24" halign="left" />
+		</screen>
+	"""
+
 	def __init__(self, session):
 		self.session = session
 		Screen.__init__(self, session)
+
+		from Tools.Directories import SCOPE_CURRENT_SKIN
+
+		print "sking corrent %s" %(SCOPE_CURRENT_SKIN)
+
 		# self.skin=PrincipalScreen.skin.replace("$PLUGINDIR$", utils._plugindir)
-		self.skinName = ["Setup"]
+		self.skin=PrincipalScreen.skin
+		# self.skinName = ["Setup"]
 		self["Title"].text = utils._title + " - " + utils._developer
 		self.onFirstExecBegin.append(self.verificarVersao)
 		self.list = []
@@ -85,13 +103,19 @@ class PrincipalScreen(ConfigListScreen, Screen):
 					self.ipkg_remove = self.ipkg + ' remove'
 
 				self.container.execute(self.ipkg + " /tmp/geradorPicon.ipk")
-				self.session.open(MessageBox,
-				                  text="É necessário reiniciar a interface para que a atualização seja efetivada?\nConfirma?",
-				                  type=MessageBox.TYPE_WARNING, close_on_any_key=True, timeout=5)
+
+				self.session.openWithCallback(self.reiniciar, MessageBox, _("É necessário reiniciar a interface para que a atualização seja efetivada?\nConfirma?"), MessageBox.TYPE_YESNO)
+
 			except:
 				self.session.open(MessageBox,
 				                  text="Não foi possível baixar a nova versão!\nTente mais tarde, quem sabe já esteja funcionando...",
 				                  type=MessageBox.TYPE_WARNING, close_on_any_key=True, timeout=10)
+
+	def reiniciar(self,answer):
+		if answer:
+			from Screens.Standby import TryQuitMainloop
+			self.session.open(TryQuitMainloop, 3)
+
 
 	def loading(self):
 		self.session.open(ProcessarCompativeisScreen)

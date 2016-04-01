@@ -19,16 +19,14 @@ from geradorpicons import config
 
 class ProcessarCompativeisScreen(Screen):
 	skin = """
-	  <screen name="ProcessarCompativeisScreen"  position="fill" title="" flags="wfNoBorder">
-            <panel name="PigTemplate"/>
-
-            <widget source="job_name" render="Label" position="590,110" size="600,35" font="Regular;28" />
-            <widget source="job_task" render="Label" position="590,188" size="600,30" font="Regular;24" />
-			<widget source="job_progress" render="Progress" position="590,260" size="600,36" borderWidth="2" backgroundColor="#254f7497" />
-			<widget source="job_progress" render="Label" position="690,262" size="410,32" font="Regular;28" foregroundColor="#000000" zPosition="2" halign="center" transparent="1"  >
-				<convert type="ProgressToText" />
-			</widget>
-      </screen>
+			<screen name="ProcessarCompativeisScreen" position="267,111" size="723,500" title="Gerador de Picons">
+			      <widget source="job_name" render="Label" position="65,147" size="600,35" font="Regular;28" />
+			      <widget source="job_task" render="Label" position="65,216" size="600,30" font="Regular;24" />
+			      <widget source="job_progress" render="Progress" position="65,291" size="600,36" borderWidth="2" backgroundColor="#254f7497" />
+			      <widget source="job_progress" render="Label" position="160,294" size="410,32" font="Regular;28" foregroundColor="#000000" zPosition="2" halign="center" transparent="1">
+			        <convert type="ProgressToText" />
+			      </widget>
+			</screen>
 	"""
 
 	def __init__(self, session):
@@ -43,6 +41,7 @@ class ProcessarCompativeisScreen(Screen):
 		self.jobName = StaticText()
 		self.jobTask = StaticText()
 		self["job_progress"] = self.progress
+
 
 		self["job_name"] = self.jobName
 		self["job_task"] = self.jobTask
@@ -108,7 +107,7 @@ class ProcessarCompativeisScreen(Screen):
 		self.downloadTimer.start(1, True)
 
 	def atualizaProgresso(self):
-		chunck = self.response.iter_content(8192).next()
+		chunck = self.response.iter_content(9216).next()
 
 		self.recebido += len(chunck)
 		self.progress.value = self.recebido

@@ -22,13 +22,17 @@ def languageChanged():
 
 class DuvidasPiconScreen(Screen):
 	skin="""
-	  <screen name="DuvidasPicon" position="fill" flags="wfNoBorder">
-	    <panel name="PigTemplate"/>
-	    <panel name="ButtonTemplate_RGS"/>
-	    <eLabel text="Plugin browser" position="85,30" size="1085,55" backgroundColor="secondBG" transparent="1" zPosition="1" font="Regular;24" valign="center" halign="left" />
-	    <widget name="list" position="590,110" size="630,500" font="Regular;26" scrollbarMode="showOnDemand" selectionPixmap="PLi-HD/buttons/sel.png" />
-  </screen>
-	"""
+		 <screen name="DuvidasPicon" position="267,111" size="723,500" title="Gerador de Picons">
+
+		         <widget name="list" position="44,10" size="630,444" font="Regular;26" scrollbarMode="showOnDemand" selectionPixmap="skin_default-HD/buttons/sel.png" />
+		         <ePixmap pixmap="skin_default/buttons/red.png" position="131,460" size="26,26" alphatest="on" />
+		        <widget source="key_red" render="Label" position="166,460" size="220,28" backgroundColor="darkgrey" zPosition="2" transparent="1" foregroundColor="grey" font="Regular;24" halign="left" />
+
+		        <ePixmap pixmap="skin_default/buttons/green.png" position="415,460" size="26,26" alphatest="on" />
+		        <widget source="key_green" render="Label" position="450,460" size="220,28" backgroundColor="darkgrey" zPosition="2" transparent="1" foregroundColor="grey" font="Regular;24" halign="left" />
+
+		      </screen>
+			"""
 	def __init__(self, session,zipFile, gerados={},duvidas={}):
 		Screen.__init__(self, session)
 		# self.skinName = [ "PluginBrowser" ]
