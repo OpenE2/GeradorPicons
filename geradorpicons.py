@@ -54,7 +54,8 @@ class PrincipalScreen(ConfigListScreen, Screen):
 			                            "green": self.confirma,
 			                            "red": self.cancel,
 			                            "cancel": self.cancel,
-			                            "ok": self.selecionarDiretorio
+			                            "ok": self.selecionarDiretorio,
+			                            "yellow":self.getPicons
 		                            }, -2)
 
 		self.changedEntry()
@@ -69,7 +70,7 @@ class PrincipalScreen(ConfigListScreen, Screen):
 	def atualizarVersao(self, answer):
 		if answer:
 			self.container = eConsoleAppContainer()
-			import urllib, ConfigParser
+			import urllib
 			try:
 				testfile = urllib.URLopener()
 				testfile.retrieve(utils._urlVersao, "/tmp/geradorPicon.ipk")
@@ -130,6 +131,37 @@ class PrincipalScreen(ConfigListScreen, Screen):
 		if caminho is None or caminho.strip() == '':
 			return
 		config.plugins.Channel.pasta.value=caminho
+
+	def getPicons(self):
+		from Components.Sources.ServiceList import ServiceList
+		from enigma import eServiceReference, eServiceCenter, iServiceInformation
+		import shutil
+
+		currentServiceRef = self.session.nav.getCurrentlyPlayingServiceReference()
+		servicelist = ServiceList("")
+		servicelist.setRoot(currentServiceRef)
+		canais = servicelist.getServicesAsList()
+
+		servicehandler = eServiceCenter.getInstance()
+
+		try:
+			os.makedirs("/tmp/piconsTmp")
+		except OSError as exception:
+			pass
+
+		piconsDir=config.plugins.Channel.pasta.value
+
+		for item in canais:
+		    canal = eServiceReference(item[0])
+		    if canal:
+			    nome = servicehandler.info(canal).getName(canal)
+			    picon=canal.toString()[:-1].replace(":","_")+".png"
+			    try:
+			        shutil.copy(piconsDir+"/"+picon,"/tmp/piconsTmp/"+nome+".png")
+			    except:
+			        pass
+
+
 
 
 class SelectDirectoryWindow(Screen):
