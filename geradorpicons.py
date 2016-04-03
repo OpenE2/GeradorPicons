@@ -39,7 +39,11 @@ class PrincipalScreen(ConfigListScreen, Screen):
 		self.session = session
 		Screen.__init__(self, session)
 
-		from Tools.Directories import SCOPE_CURRENT_SKIN
+		# from Components.NimManager import nimmanager
+		#
+		# print "tem dvb-c ? %s" %( nimmanager.hasNimType("DVB-C"))
+		# print "tem dvb-s ? %s" %( nimmanager.hasNimType("DVB-S"))
+
 
 		# self.skin=PrincipalScreen.skin.replace("$PLUGINDIR$", utils._plugindir)
 		self.skin=PrincipalScreen.skin

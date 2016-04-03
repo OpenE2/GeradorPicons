@@ -63,7 +63,7 @@ def getPiconsZipped(url,callback=[]):
 	zipDocument = zipfile.ZipFile(StringIO.StringIO(content))
 	return zipDocument
 
-def getTransponderInfo(transponder_info):
+def getSatInfo(transponder_info):
 		tunerType = transponder_info["tuner_type"]
 		if tunerType == "DVB-S":
 			pos = int(transponder_info["orbital_position"])

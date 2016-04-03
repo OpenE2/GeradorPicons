@@ -13,11 +13,11 @@ def PluginCategoryComponent(name, png, sat, tp,width=440,hd=False):
 	res= [
 		name,
 		MultiContentEntryText(pos=(5, 5), size=(width-80, 25), font=0, text=name),
-		MultiContentEntryText(pos=(15, 30), size=(width-80, 25), font=0, text=sat),
-		MultiContentEntryText(pos=(70, 30), size=(width-80, 25), font=0, text=tp)
+		MultiContentEntryText(pos=(10, 30), size=(width-80, 25), font=0, text=sat),
+		MultiContentEntryText(pos=(80, 30), size=(width-80, 25), font=0, text=tp)
 	]
 	if hd:
-		res.append(MultiContentEntryPixmapAlphaTest(pos=(150,20), size=(40, 50), png = hdpng,flags = BT_SCALE | BT_KEEP_ASPECT_RATIO))
+		res.append(MultiContentEntryPixmapAlphaTest(pos=(160,22), size=(40, 50), png = hdpng,flags = BT_SCALE | BT_KEEP_ASPECT_RATIO))
 
 	return res
 
@@ -42,3 +42,7 @@ class PluginList(MenuList):
 		self.l.setFont(0, gFont("Regular", 20))
 		self.l.setFont(1, gFont("Regular", 14))
 		self.l.setItemHeight(100)
+
+	def pageDown(self,arg):
+		print arg
+		print dir(self)

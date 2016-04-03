@@ -47,19 +47,22 @@ class DuvidasPiconScreen(Screen):
 		self["Title"].text=utils._title
 
 		self.list = []
-		self["list"] = PluginList(self.list)
+		self.lista=PluginList(self.list)
+		self["list"] = self.lista
 		self.duvidasList = {}
 		self.expanded = []
 
 		self["key_red"] = StaticText(_("Cancelar"))
 		self["key_green"] = StaticText(_("Salvar"))
 
-		self["actions"] = ActionMap(["OkCancelActions","InputActions","ColorActions", "setupActions"],
+		self["actions"] = ActionMap(["OkCancelActions","InputActions","ColorActions", "DirectionActions"],
         {
             "green": self.enviar,
             "cancel": self.close,
             "ok":self.selecionar,
 	        "back": self.close,
+	        "left": self.left,
+	        "right": self.right
 
         }, -2)
 		self.gerados=gerados
@@ -111,14 +114,17 @@ class DuvidasPiconScreen(Screen):
 		self.listWidth = listsize.width()
 		self.listHeight = listsize.height()
 
-		from enigma import eServiceReference, eServiceCenter, iServiceInformation
+		from enigma import eServiceReference, eServiceCenter, iServiceInformation,eDVBDB
 		servicehandler = eServiceCenter.getInstance()
+
 
 		for x in self.duvidasList.keys():
 
 			transponder_info = servicehandler.info(x).getInfoObject(x, iServiceInformation.sTransponderData)
-
-			tp=int(transponder_info["frequency"])/1000+transponder_info["polarisation"]
+			if transponder_info["tuner_type"]=="DVB-C":
+				tp=str(int(transponder_info["frequency"])/1000)
+			else:
+				tp=str(int(transponder_info["frequency"])/1000)+transponder_info["polarisation"]
 
 			hd = False
 			if x.type == 25:
@@ -154,6 +160,27 @@ class DuvidasPiconScreen(Screen):
 
 	def addIntoCategory(self,categoria,item):
 		self.getCategory(categoria).extend([Picon(categoria,picon,self.zipFile,duvida=True) for picon in item])
+
+
+	def right(self):
+		selecionado=self.lista.getSelectedIndex()+1
+		if selecionado<len(self.list):
+
+			for i in range(selecionado,len(self.list)):
+				if isinstance(self.list[i][0],str):
+					self.lista.moveToIndex(i)
+					break
+
+	def left(self):
+		selecionado=self.lista.getSelectedIndex()-1
+		if selecionado < 0: pass
+
+		for i in range(selecionado,0,-1):
+			if isinstance(self.list[i][0],str):
+				self.lista.moveToIndex(i)
+				break
+
+
 
 
 

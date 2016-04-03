@@ -13,6 +13,7 @@ from enigma import eTimer
 
 import utils
 from Picon import Picon
+from ProgressoGerador import ProgressoGeradorScreen
 from duvidasList import DuvidasPiconScreen
 from geradorpicons import config
 
@@ -91,6 +92,9 @@ class ProcessarCompativeisScreen(Screen):
 			print "gerados: %d, duvidas: %d" % (len(self.gerados), len(self.duvidas))
 			if len(self.duvidas) > 0:
 				self.abre()
+			else:
+				self.session.open(ProgressoGeradorScreen,zipFile=self.zipFile,gerados=self.gerados)
+
 
 	def downloadZip(self):
 
