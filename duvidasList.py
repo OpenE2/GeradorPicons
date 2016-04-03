@@ -44,7 +44,7 @@ class DuvidasPiconScreen(Screen):
 
 		self.onFirstExecBegin.append(self.mostraMensagem)
 
-		self["Title"].text=utils._title+" - "+utils._developer
+		self["Title"].text=utils._title
 
 		self.list = []
 		self["list"] = PluginList(self.list)
@@ -68,7 +68,7 @@ class DuvidasPiconScreen(Screen):
 
 
 	def mostraMensagem(self):
-		msg="Foram encontrado(s) %d picons!\nPorém eu fiquei em dúvida em alguns.\nVocê pode escolher na lista os que combinam com cada canal."%(len(self.gerados))
+		msg="Foram encontrado(s) %d picons!\nPorem eu fiquei em dúvida em alguns.\nVocê pode escolher na lista os que combinam com cada canal."%(len(self.gerados))
 		self.session.open(MessageBox, text = msg, type = MessageBox.TYPE_WARNING,close_on_any_key=True, timeout=5)
 
 
@@ -111,9 +111,23 @@ class DuvidasPiconScreen(Screen):
 		self.listWidth = listsize.width()
 		self.listHeight = listsize.height()
 
+		from enigma import eServiceReference, eServiceCenter, iServiceInformation
+		servicehandler = eServiceCenter.getInstance()
 
 		for x in self.duvidasList.keys():
-			list.append(PluginCategoryComponent(self.getNome(x), expandedIcon, self.listWidth))
+
+			transponder_info = servicehandler.info(x).getInfoObject(x, iServiceInformation.sTransponderData)
+
+			tp=int(transponder_info["frequency"])/1000+transponder_info["polarisation"]
+
+			hd = False
+			if x.type == 25:
+				hd = True
+			nome = servicehandler.info(x).getName(x).lower()
+			if x and nome.endswith("hd"):
+				hd = True
+
+			list.append(PluginCategoryComponent(self.getNome(x),expandedIcon,sat=utils.getSatInfo(transponder_info),tp=tp,hd=hd, width=self.listWidth))
 			list.extend([PluginDownloadComponent(picon, self.listWidth) for picon in self.duvidasList[x]])
 
 		self.list = list

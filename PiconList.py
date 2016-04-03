@@ -4,14 +4,22 @@ from Tools.Directories import resolveFilename, SCOPE_CURRENT_SKIN
 from Tools.LoadPixmap import LoadPixmap
 from enigma import eListboxPythonMultiContent, gFont,BT_SCALE,BT_KEEP_ASPECT_RATIO
 
-selectionpng = LoadPixmap(cached=True, path=resolveFilename(SCOPE_CURRENT_SKIN, "skin_default/icons/selectioncross.png"))
+import utils
 
-def PluginCategoryComponent(name, png, width=440):
-	return [
+selectionpng = LoadPixmap(cached=True, path=resolveFilename(SCOPE_CURRENT_SKIN, "skin_default/icons/selectioncross.png"))
+hdpng = LoadPixmap(cached=True, path=utils._plugindir+"/hd_icon.png")
+
+def PluginCategoryComponent(name, png, sat, tp,width=440,hd=False):
+	res= [
 		name,
-		MultiContentEntryText(pos=(5, 5), size=(width-80, 25), font=0, text=name)
-		# MultiContentEntryPixmapAlphaTest(pos=(10, 0), size=(60, 50), png = png)
+		MultiContentEntryText(pos=(5, 5), size=(width-80, 25), font=0, text=name),
+		MultiContentEntryText(pos=(15, 30), size=(width-80, 25), font=0, text=sat),
+		MultiContentEntryText(pos=(70, 30), size=(width-80, 25), font=0, text=tp)
 	]
+	if hd:
+		res.append(MultiContentEntryPixmapAlphaTest(pos=(150,20), size=(40, 50), png = hdpng,flags = BT_SCALE | BT_KEEP_ASPECT_RATIO))
+
+	return res
 
 def PluginDownloadComponent(picon, width=440):
 

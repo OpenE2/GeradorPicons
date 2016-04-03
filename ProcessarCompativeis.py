@@ -33,7 +33,7 @@ class ProcessarCompativeisScreen(Screen):
 		Screen.__init__(self, session)
 		self.skin = ProcessarCompativeisScreen.skin
 
-		self["Title"].text = utils._title + " - " + utils._developer
+		self["Title"].text = utils._title
 		self.tipoPicon = config.plugins.Channel.tipo.value
 		self.onFirstExecBegin.append(self.downloadZip)
 		self.progress = Progress()
@@ -166,7 +166,7 @@ class ProcessarCompativeisScreen(Screen):
 		for file in self.listaPicons:
 			# if nome.lower().startswith("premiere hd"):
 			# 	print "%s = %s, %s"%(re.sub("\s+","",file[1]).lower(),re.sub("\s+","",nome).lower(), re.sub("\s+","",file[1]).lower()==re.sub("\s+","",nome).lower())
-			if re.sub("\s+", "", file[1]).lower() == re.sub("\s+", "", nome) + ".png".lower():
+			if utils.corrigiNome(re.sub("\s+", "", file[1])).lower() == utils.corrigiNome(re.sub("\s+", "", nome)) + ".png".lower():
 				return [file]
 
 		tmpTags = Set(self.tags.keys())
@@ -244,9 +244,9 @@ class ProcessarCompativeisScreen(Screen):
 		tmp = Set()
 		for file in arquivos:
 			if nao:
-				if nome.strip() not in file[1].lower():
+				if nome.strip() not in utils.corrigiNome(file[1]).lower():
 					tmp.add(file)
-			elif nome.strip().lower() in file[1].lower():
+			elif nome.strip().lower() in utils.corrigiNome(file[1]).lower():
 				tmp.add(file)
 
 		# print "filtrado %d"%(len(tmp))

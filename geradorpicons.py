@@ -41,12 +41,10 @@ class PrincipalScreen(ConfigListScreen, Screen):
 
 		from Tools.Directories import SCOPE_CURRENT_SKIN
 
-		print "sking corrent %s" %(SCOPE_CURRENT_SKIN)
-
 		# self.skin=PrincipalScreen.skin.replace("$PLUGINDIR$", utils._plugindir)
 		self.skin=PrincipalScreen.skin
 		# self.skinName = ["Setup"]
-		self["Title"].text = utils._title + " - " + utils._developer
+		self["Title"].text = utils._title
 		self.onFirstExecBegin.append(self.verificarVersao)
 		self.list = []
 		self["config"] = ConfigList(self.list)

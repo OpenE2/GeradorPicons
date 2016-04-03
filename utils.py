@@ -1,7 +1,9 @@
-_version = "2.2"
+_version = "2.5"
 _plugindir = "/usr/lib/enigma2/python/Plugins/Extensions/GeradorPicons"
-_title = "Gerador de Picons"
 _developer = "gravatasufoca"
+_title = "Gerador de Picons - "+_version+" - "+_developer
+_pluginNome = "Gerador de Picons"
+
 _outdir = '/etc/enigma2'
 _cacheFile=_plugindir+"/cache.txt"
 
@@ -60,3 +62,14 @@ def getPiconsZipped(url,callback=[]):
 
 	zipDocument = zipfile.ZipFile(StringIO.StringIO(content))
 	return zipDocument
+
+def getTransponderInfo(transponder_info):
+		tunerType = transponder_info["tuner_type"]
+		if tunerType == "DVB-S":
+			pos = int(transponder_info["orbital_position"])
+			direction = 'E'
+			if pos > 1800:
+				pos = 3600 - pos
+				direction = 'W'
+			return "%d.%d%s" % (pos/10, pos%10, direction)
+		return tunerType

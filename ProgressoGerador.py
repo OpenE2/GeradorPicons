@@ -29,7 +29,7 @@ class ProgressoGeradorScreen(Screen):
 		Screen.__init__(self, session)
 		self.skin=ProgressoGeradorScreen.skin
 
-		self["Title"].text=utils._title+" - "+utils._developer
+		self["Title"].text=utils._title
 
 		self.onFirstExecBegin.append(self.windowShow)
 		self.gerados=gerados

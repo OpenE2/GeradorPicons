@@ -12,7 +12,7 @@ def main(session, **kwargs):
 # Plugin descriptor, name, icon, etc.
 def Plugins(**kwargs):
     return [
-        PluginDescriptor(where=PluginDescriptor.WHERE_PLUGINMENU, fnc=main, icon="plugin.png", name=utils._title, description="Gere picons a partir dos seus canais"),
-        PluginDescriptor(where=PluginDescriptor.WHERE_EXTENSIONSMENU, fnc=main, icon="plugin.png", name=utils._title, description="Gere picons a partir dos seus canais")
+        PluginDescriptor(where=PluginDescriptor.WHERE_PLUGINMENU, fnc=main, icon="plugin.png", name=utils._pluginNome, description="Gere picons a partir dos seus canais"),
+        PluginDescriptor(where=PluginDescriptor.WHERE_EXTENSIONSMENU, fnc=main, icon="plugin.png", name=utils._pluginNome, description="Gere picons a partir dos seus canais")
 
       ]
