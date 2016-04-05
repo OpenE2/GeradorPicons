@@ -121,10 +121,11 @@ class DuvidasPiconScreen(Screen):
 		for x in self.duvidasList.keys():
 
 			transponder_info = servicehandler.info(x).getInfoObject(x, iServiceInformation.sTransponderData)
+			print transponder_info.keys()
 			if transponder_info["tuner_type"]=="DVB-C":
 				tp=str(int(transponder_info["frequency"])/1000)
 			else:
-				tp=str(int(transponder_info["frequency"])/1000)+transponder_info["polarisation"]
+				tp=str(int(transponder_info["frequency"])/1000)+ "H" if transponder_info["polarization"]==0 else "V"
 
 			hd = False
 			if x.type == 25:
