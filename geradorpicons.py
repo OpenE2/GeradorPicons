@@ -207,7 +207,7 @@ class SelectDirectoryWindow(Screen):
 	def __init__(self, session, currentDir):
 
 		Screen.__init__(self, session)
-		inhibitDirs = ["/bin", "/boot", "/dev", "/etc", "/lib", "/proc", "/sbin", "/sys"]
+		inhibitDirs = []
 		self["filelist"] = FileList(currentDir, showDirectories=True, showFiles=False, inhibitMounts=[],
 	                            inhibitDirs=inhibitDirs)
 		self["actions"]=ActionMap(["WizardActions","DirectionActions","ColorActions","EPGSelectActions"],{

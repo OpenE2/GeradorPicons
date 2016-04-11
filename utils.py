@@ -1,4 +1,4 @@
-_version = "2.54"
+_version = "2.55"
 _plugindir = "/usr/lib/enigma2/python/Plugins/Extensions/GeradorPicons"
 _developer = "gravatasufoca"
 _title = "Gerador de Picons - "+_version+" - "+_developer
@@ -23,8 +23,6 @@ def corrigiNome(nome):
 	nome= removerAcentos(re.sub('\s+(?=\d+)', '', nome))
 	nome= re.sub('\s+(?=\++)', '', nome)
 	return re.sub('(?<=\+)\s+','',nome)
-
-
 
 def removerAcentos(input_str):
 	from unicodedata import normalize
