@@ -14,7 +14,7 @@ from geradorpicons import config
 class ProgressoGeradorScreen(Screen):
 
 	skin="""
-			<screen name="ProgressoGerador" position="267,111" size="723,500" title="Gerador de Picons">
+			<screen name="ProgressoGerador" position="center,center" size="723,500" title="Gerador de Picons">
 			      <widget source="job_name" render="Label" position="65,147" size="600,35" font="Regular;28" />
 			      <widget source="job_task" render="Label" position="65,216" size="600,30" font="Regular;24" />
 			      <widget source="job_progress" render="Progress" position="65,291" size="600,36" borderWidth="2" backgroundColor="#254f7497" />

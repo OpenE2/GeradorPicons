@@ -22,7 +22,7 @@ def languageChanged():
 
 class DuvidasPiconScreen(Screen):
 	skin="""
-		 <screen name="DuvidasPicon" position="267,111" size="723,500" title="Gerador de Picons">
+		 <screen name="DuvidasPicon" position="center,center" size="723,500" title="Gerador de Picons">
 
 		         <widget name="list" position="44,10" size="630,444" font="Regular;26" scrollbarMode="showOnDemand" selectionPixmap="skin_default-HD/buttons/sel.png" />
 		         <ePixmap pixmap="skin_default/buttons/red.png" position="131,460" size="26,26" alphatest="on" />

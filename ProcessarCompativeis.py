@@ -20,7 +20,7 @@ from geradorpicons import config
 
 class ProcessarCompativeisScreen(Screen):
 	skin = """
-			<screen name="ProcessarCompativeisScreen" position="267,111" size="723,500" title="Gerador de Picons">
+			<screen name="ProcessarCompativeisScreen" position="center,center" size="723,500" title="Gerador de Picons">
 			      <widget source="job_name" render="Label" position="65,147" size="600,35" font="Regular;28" />
 			      <widget source="job_task" render="Label" position="65,216" size="600,30" font="Regular;24" />
 			      <widget source="job_progress" render="Progress" position="65,291" size="600,36" borderWidth="2" backgroundColor="#254f7497" />
@@ -62,7 +62,6 @@ class ProcessarCompativeisScreen(Screen):
 			canal = eServiceReference(item[0])
 			if canal:
 				nome = servicehandler.info(canal).getName(canal).lower()
-
 				self.jobName.text = "Processando canal %s" % (nome)
 
 				transponder_info = servicehandler.info(canal).getInfoObject(canal, iServiceInformation.sTransponderData)
@@ -71,19 +70,21 @@ class ProcessarCompativeisScreen(Screen):
 				hd = False
 				if canal.type == 25:
 					hd = True
-				if cabo and nome.strip().endswith("hd"):
+				if cabo and (" hd" in nome or " hd " in nome):
+					print "eh hd %s"%(nome)
 					hd = True
 
-				self.jobTask.text = "Procurando picons compatíveis..."
-				arqs = self.getCompativel(utils.corrigiNome(nome), hd)
+				if not (not nome or nome == "(...)"):
+					self.jobTask.text = "Procurando picons compatíveis..."
+					arqs = self.getCompativel(utils.corrigiNome(nome), hd)
 
-				if arqs:
-					if len(arqs) == 1:
-						self.jobTask.text = "Picon encontrado!"
-						self.gerados[canal] = Picon(canal, arqs[0], self.zipFile)
-					elif len(arqs) > 1:
-						self.jobTask.text = "Hum... Dúvidas..."
-						self.duvidas[canal] = arqs[0:10]
+					if arqs:
+						if len(arqs) == 1:
+							self.jobTask.text = "Picon encontrado!"
+							self.gerados[canal] = Picon(canal, arqs[0], self.zipFile)
+						elif len(arqs) > 1:
+							self.jobTask.text = "Hum... Dúvidas..."
+							self.duvidas[canal] = arqs[0:10]
 
 			self.progress.value = self.total - len(self.canais)
 			self.timer.start(10, True)
@@ -121,7 +122,7 @@ class ProcessarCompativeisScreen(Screen):
 		else:
 			self.zipFile = zipfile.ZipFile(StringIO.StringIO(self.content))
 			if self.zipFile:
-				self.listaPicons = [(name, re.split("\/", name)[1]) for name in self.zipFile.namelist()]
+				self.listaPicons = [(name, utils.corrigiNome(re.split("\/", name)[1])) for name in self.zipFile.namelist()]
 
 				self.timerGerar = eTimer()
 				self.timerGerar.callback.append(self.gerarChannel)
@@ -142,7 +143,7 @@ class ProcessarCompativeisScreen(Screen):
 
 		self.tags = {}
 		for file in self.listaPicons:
-			nomes = re.split("\s", utils.corrigiNome(file[1]))
+			nomes = re.split("\s", file[1])
 			for nome in nomes:
 				if not self.tags.has_key(nome):
 					self.tags[nome] = []
@@ -152,10 +153,10 @@ class ProcessarCompativeisScreen(Screen):
 		servicelist = ServiceList("")
 		servicelist.setRoot(currentServiceRef)
 		self.canais = servicelist.getServicesAsList()
-		self.filtrarRadios()
+
 		self.gerados = {}
 		self.duvidas = {}
-
+		self.filtrarRadios()
 		self.progress.setRange(len(self.canais))
 		self.progress.value = 0
 
@@ -184,6 +185,8 @@ class ProcessarCompativeisScreen(Screen):
 	def getCompativel(self, nome, hd):
 
 		for file in self.listaPicons:
+			# if nome.lower().startswith("premiere hd"):
+			# 	print "%s = %s, %s"%(re.sub("\s+","",file[1]).lower(),re.sub("\s+","",nome).lower(), re.sub("\s+","",file[1]).lower()==re.sub("\s+","",nome).lower())
 			if re.sub("\s+", "", file[1]).lower() == re.sub("\s+", "", nome) + ".png".lower():
 				return [file]
 
@@ -199,7 +202,7 @@ class ProcessarCompativeisScreen(Screen):
 		# print "verifica se tem nome compativel"
 
 		for file in compativeis:
-			fileName = utils.corrigiNome(file[1])
+			fileName = file[1]
 			if fileName.strip() == nome:
 				return [file]
 
@@ -214,7 +217,7 @@ class ProcessarCompativeisScreen(Screen):
 
 		for file in compativeis:
 			i = 0
-			fileName = re.split("\s", utils.corrigiNome(file[1]))
+			fileName = re.split("\s", file[1])
 			for name in fileName:
 				if name.strip().lower() == nome.lower() or nome.replace("\s+", "").strip().lower() == name.lower():
 					return [file]
@@ -274,7 +277,7 @@ class ProcessarCompativeisScreen(Screen):
 		tmpTags = Set()
 		if files:
 			for file in files:
-				name = re.split("\s", utils.corrigiNome(file[1]))
+				name = re.split("\s", file[1])
 				for t in name:
 					if t.strip().lower() == "hd" and not hd: continue
 					tmpTags.add(t.strip())

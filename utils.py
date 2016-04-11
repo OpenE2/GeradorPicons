@@ -1,11 +1,12 @@
-_version = "2.55"
-_plugindir = "/usr/lib/enigma2/python/Plugins/Extensions/GeradorPicons"
+from Tools.Directories import resolveFilename, SCOPE_PLUGINS, SCOPE_CONFIG, SCOPE_SYSETC
+
+_version = "2.6"
+_plugindir = resolveFilename(SCOPE_PLUGINS, "Extensions/GeradorPicons")
 _developer = "gravatasufoca"
 _title = "Gerador de Picons - "+_version+" - "+_developer
 _pluginNome = "Gerador de Picons"
 
-_outdir = '/etc/enigma2'
-_cacheFile=_plugindir+"/cache.txt"
+_outdir = resolveFilename(SCOPE_CONFIG, "")
 
 _urlModelo="https://dl.dropboxusercontent.com/u/12772101/geradorPicons/modelos.conf"
 _urlVersao="https://dl.dropboxusercontent.com/u/12772101/geradorPicons/enigma2-plugin-extensions-gerador-picons.ipk"
@@ -21,17 +22,13 @@ def corrigiNome(nome):
 	import re
 	nome = nome.lower().replace(".png", "")
 	nome= removerAcentos(re.sub('\s+(?=\d+)', '', nome))
-	nome= re.sub('\s+(?=\++)', '', nome)
+	# nome= re.sub('\s+(?=\++)', '', nome)
 	return re.sub('(?<=\+)\s+','',nome)
 
 def removerAcentos(input_str):
 	from unicodedata import normalize
 	return normalize('NFKD', input_str.decode("UTF-8")).encode('ASCII', 'ignore')
 
-def addToCache(path):
-	arquivo =open(_cacheFile,"w")
-	arquivo.write(path+"\n")
-	arquivo.close()
 
 def getConfiguracoes():
 	import urllib,ConfigParser

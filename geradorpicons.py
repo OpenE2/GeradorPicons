@@ -25,7 +25,7 @@ config.plugins.Channel.pasta = ConfigDirectory(default="/usr/share/enigma2/picon
 class PrincipalScreen(ConfigListScreen, Screen):
 
 	skin="""
-		<screen name="PrincipalScreen" position="267,110" size="723,500" title="">
+		<screen name="PrincipalScreen" position="center,center" size="723,500" title="">
 		    <widget name="config" position="30,51" size="657,207" scrollbarMode="showOnDemand" backgroundColor="header" transparent="1" />
 		    <ePixmap pixmap="skin_default/buttons/red.png" position="131,460" size="26,26" alphatest="on" />
 		    <widget source="key_red" render="Label" position="166,460" size="220,28" backgroundColor="darkgrey" zPosition="2" transparent="1" foregroundColor="grey" font="Regular;24" halign="left" />
