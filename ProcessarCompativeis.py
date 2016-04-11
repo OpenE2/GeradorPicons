@@ -153,9 +153,9 @@ class ProcessarCompativeisScreen(Screen):
 			# 	print nomes
 
 			for nome in nomes:
-				if not self.tags.has_key(nome.strip().lower()):
-					self.tags[nome.strip().lower()] = []
-				self.tags[nome.strip().lower()].append(file)
+				if not self.tags.has_key(nome):
+					self.tags[nome] = []
+				self.tags[nome].append(file)
 
 
 		# for tag in self.tags.keys():
