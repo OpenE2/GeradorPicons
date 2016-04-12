@@ -2,6 +2,8 @@ import os
 
 from Tools.LoadPixmap import LoadPixmap
 
+import utils
+
 
 class Picon:
 	def __init__(self,categoria,path,zipFile,duvida=False):
@@ -11,10 +13,11 @@ class Picon:
 		self.selected=False
 		self.duvida=duvida
 
-		self.tmpPng=zipFile.extract(self.path,"/tmp")
-		self.png=LoadPixmap(self.tmpPng)
-
-		self.tipoPicon=self.tmpPng.split("/")[2]
+		self.tmpPng=zipFile.extract(self.path,utils._picoZipDir)
+		if self.tmpPng:
+			self.png=LoadPixmap(self.tmpPng)
+		else:
+			self.png=None
 
 	def getPiconName(self):
 		# replace("#SERVICE ", "").split("::")[0].replace(":", "_")+".png";

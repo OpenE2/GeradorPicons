@@ -81,7 +81,7 @@ class DuvidasPiconScreen(Screen):
 			if len(picon)>0:
 				self.gerados[canal]=picon[0]
 
-		self.session.open(ProgressoGeradorScreen,zipFile=self.zipFile,gerados=self.gerados)
+		self.session.open(ProgressoGeradorScreen,zipFile=self.zipFile,gerados=self.gerados.copy())
 
 
 

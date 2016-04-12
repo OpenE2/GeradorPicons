@@ -35,7 +35,7 @@ class ProcessarCompativeisScreen(Screen):
 		self.skin = ProcessarCompativeisScreen.skin
 
 		self["Title"].text = utils._title
-		self.tipoPicon = config.plugins.Channel.tipo.value
+		self.tipoPicon = config.plugins.geradorpicon.tipo.value
 		self.onFirstExecBegin.append(self.downloadZip)
 		self.progress = Progress()
 
@@ -137,9 +137,6 @@ class ProcessarCompativeisScreen(Screen):
 		self.close_on_next_exec = (0, 1)
 
 		from Components.Sources.ServiceList import ServiceList
-
-		# self.tipoPicon = config.plugins.Channel.tipo.value
-		# self.listaPicons = [(os.path.join(self.tipoPicon, o), o) for o in os.listdir(self.tipoPicon) if o.lower().endswith(".png")]
 
 		self.tags = {}
 		for file in self.listaPicons:

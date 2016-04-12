@@ -57,14 +57,9 @@ class ProgressoGeradorScreen(Screen):
 		self.wrappertimer.callback.append(self.processar)
 		self.wrappertimer.start(10, True)
 
-	def reload(self):
-		eDVBDB.getInstance().reloadBouquets()
-		eDVBDB.getInstance().reloadServicelist()
-		self.close()
-
 	def processar(self):
 		if self.gerados:
-			piconsDir=config.plugins.Channel.pasta.value
+			piconsDir=config.plugins.geradorpicon.pasta.value
 
 			try:
 				os.makedirs(piconsDir)
@@ -81,7 +76,6 @@ class ProgressoGeradorScreen(Screen):
 				nome = servicehandler.info(canal).getName(canal).lower()
 				self.jobName.text = "Processando canal %s" % (nome)
 				if picon:
-					self.tipoPicon=picon.tipoPicon
 					piconName = piconsDir + "/" + picon.getPiconName()
 					self.jobTask.text = "Copiando arquivo..."
 
@@ -93,11 +87,8 @@ class ProgressoGeradorScreen(Screen):
 		else:
 			self.jobName.text="Concluído!"
 			self.jobTask.text=""
-			print "/tmp/%s"%(self.tipoPicon)
-			shutil.rmtree("/tmp/"+self.tipoPicon,True)
-
 			self.timer = eTimer()
-			self.timer.callback.append(self.reload)
+			self.timer.callback.append(self.close)
 			self.timer.start(2000,True)
 
 

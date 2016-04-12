@@ -1,6 +1,6 @@
 from Tools.Directories import resolveFilename, SCOPE_PLUGINS, SCOPE_CONFIG, SCOPE_SYSETC
 
-_version = "2.6"
+_version = "2.66"
 _plugindir = resolveFilename(SCOPE_PLUGINS, "Extensions/GeradorPicons")
 _developer = "gravatasufoca"
 _title = "Gerador de Picons - "+_version+" - "+_developer
@@ -10,6 +10,7 @@ _outdir = resolveFilename(SCOPE_CONFIG, "")
 
 _urlModelo="https://dl.dropboxusercontent.com/u/12772101/geradorPicons/modelos.conf"
 _urlVersao="https://dl.dropboxusercontent.com/u/12772101/geradorPicons/enigma2-plugin-extensions-gerador-picons.ipk"
+_picoZipDir="/tmp/piconZip"
 
 screens=[]
 

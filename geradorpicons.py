@@ -8,6 +8,7 @@ from Components.FileList import FileList
 from Components.Label import Label
 from Components.Sources.StaticText import StaticText
 from Components.config import *
+from Screens.Console import Console
 from Screens.MessageBox import MessageBox
 from Screens.Screen import Screen
 from enigma import eConsoleAppContainer
@@ -15,10 +16,10 @@ from enigma import eConsoleAppContainer
 import utils
 from ProcessarCompativeis import ProcessarCompativeisScreen
 
-config.plugins.Channel = ConfigSubsection()
-config.plugins.Channel.tipo = ConfigSelection(default="", choices=[])
+config.plugins.geradorpicon = ConfigSubsection()
+config.plugins.geradorpicon.tipo = ConfigSelection(default="", choices=[])
 
-config.plugins.Channel.pasta = ConfigDirectory(default="/usr/share/enigma2/picon", visible_width=500)
+config.plugins.geradorpicon.pasta = ConfigDirectory(default="/usr/share/enigma2/picon", visible_width=500)
 
 
 # Class EasyBouquetScreen
@@ -50,6 +51,7 @@ class PrincipalScreen(ConfigListScreen, Screen):
 		# self.skinName = ["Setup"]
 		self["Title"].text = utils._title
 		self.onFirstExecBegin.append(self.verificarVersao)
+		self.onClose.append(self.fechar)
 		self.list = []
 		self["config"] = ConfigList(self.list)
 		self.onChangedEntry = []
@@ -62,7 +64,7 @@ class PrincipalScreen(ConfigListScreen, Screen):
 			                  type=MessageBox.TYPE_WARNING, close_on_any_key=True, timeout=5)
 			self.close()
 
-		config.plugins.Channel.tipo.setChoices(listaDiretorios)
+		config.plugins.geradorpicon.tipo.setChoices(listaDiretorios)
 
 		ConfigListScreen.__init__(self, self.list, session=self.session)
 
@@ -104,14 +106,14 @@ class PrincipalScreen(ConfigListScreen, Screen):
 					self.ipkg_install = 'ipkg install -force-defaults'
 					self.ipkg_remove = self.ipkg + ' remove'
 
-				self.container.execute(self.ipkg + " /tmp/geradorPicon.ipk")
-
-				self.session.openWithCallback(self.reiniciar, MessageBox, _("É necessário reiniciar a interface para que a atualização seja efetivada?\nConfirma?"), MessageBox.TYPE_YESNO)
-
+				self.session.openWithCallback(self.chamarReiniciar, Console, cmdlist = [self.ipkg_install + " /tmp/geradorPicon.ipk"], closeOnSuccess = True)
 			except:
 				self.session.open(MessageBox,
 				                  text="Não foi possível baixar a nova versão!\nTente mais tarde, quem sabe já esteja funcionando...",
 				                  type=MessageBox.TYPE_WARNING, close_on_any_key=True, timeout=10)
+
+	def chamarReiniciar(self):
+		self.session.openWithCallback(self.reiniciar, MessageBox, _("É necessário reiniciar a interface para que a atualização seja efetivada?\nConfirma?"), MessageBox.TYPE_YESNO)
 
 	def reiniciar(self,answer):
 		if answer:
@@ -128,8 +130,8 @@ class PrincipalScreen(ConfigListScreen, Screen):
 			x()
 
 		self.list = []
-		self.list.append(getConfigListEntry(_("Diretório dos Picons"), config.plugins.Channel.pasta))
-		self.list.append(getConfigListEntry("Modelo dos Picons", config.plugins.Channel.tipo))
+		self.list.append(getConfigListEntry(_("Diretório dos Picons"), config.plugins.geradorpicon.pasta))
+		self.list.append(getConfigListEntry("Modelo dos Picons", config.plugins.geradorpicon.tipo))
 
 		self["config"].list = self.list
 		self["config"].setList(self.list)
@@ -141,22 +143,23 @@ class PrincipalScreen(ConfigListScreen, Screen):
 
 	def confirma(self):
 
-		if config.plugins.Channel.pasta.value == "":
+		if config.plugins.geradorpicon.pasta.value == "":
 			self.session.open(MessageBox, "Por favor escolha o caminho dos picons", MessageBox.TYPE_WARNING,
 			                  close_on_any_key=True, timeout=5)
 		else:
+			config.plugins.geradorpicon.save()
 			self.loading()
 			# self.session.openWithCallback(self.loading, MessageBox, _("Confirmar a criação dos picons"), MessageBox.TYPE_YESNO)
 
 	def selecionarDiretorio(self):
 		currentItem = self["config"].getCurrent()[1]
-		if currentItem == config.plugins.Channel.pasta:
+		if currentItem == config.plugins.geradorpicon.pasta:
 			self.session.openWithCallback(self.selecaoCallback,SelectDirectoryWindow,currentItem.value)
 
 	def selecaoCallback(self,caminho):
 		if caminho is None or caminho.strip() == '':
 			return
-		config.plugins.Channel.pasta.value=caminho
+		config.plugins.geradorpicon.pasta.value=caminho
 
 	def getPicons(self):
 		from Components.Sources.ServiceList import ServiceList
@@ -175,7 +178,7 @@ class PrincipalScreen(ConfigListScreen, Screen):
 		except OSError as exception:
 			pass
 
-		piconsDir=config.plugins.Channel.pasta.value
+		piconsDir=config.plugins.geradorpicon.pasta.value
 
 		for item in canais:
 		    canal = eServiceReference(item[0])
@@ -186,6 +189,15 @@ class PrincipalScreen(ConfigListScreen, Screen):
 			        shutil.copy(piconsDir+"/"+picon,"/tmp/piconsTmp/"+nome+".png")
 			    except:
 			        pass
+
+	def fechar(self):
+		from enigma import eDVBDB
+		import shutil
+		eDVBDB.getInstance().reloadServicelist()
+		try:
+			shutil.rmtree(utils._picoZipDir,True)
+		except:
+			pass
 
 
 
