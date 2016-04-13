@@ -83,6 +83,7 @@ class PrincipalScreen(ConfigListScreen, Screen):
 		self.changedEntry()
 		utils.addScreen(self)
 
+
 	def verificarVersao(self):
 		if float(self.configuracoes["versao"]) > float(utils._version):
 			self.session.openWithCallback(self.atualizarVersao, MessageBox,

@@ -56,7 +56,6 @@ class ProcessarCompativeisScreen(Screen):
 		servicehandler = eServiceCenter.getInstance()
 
 		if self.canais:
-			# TODO: ver o porque o fox sports 2 nao esta sendo pego
 			item = self.canais.pop()
 
 			canal = eServiceReference(item[0])
@@ -65,13 +64,13 @@ class ProcessarCompativeisScreen(Screen):
 				self.jobName.text = "Processando canal %s" % (nome)
 
 				transponder_info = servicehandler.info(canal).getInfoObject(canal, iServiceInformation.sTransponderData)
+
 				cabo = transponder_info["tuner_type"] == "DVB-C"
 
 				hd = False
 				if canal.type == 25:
 					hd = True
 				if cabo and (" hd" in nome or " hd " in nome):
-					print "eh hd %s"%(nome)
 					hd = True
 
 				if not (not nome or nome == "(...)"):
@@ -179,6 +178,16 @@ class ProcessarCompativeisScreen(Screen):
 
 		self.canais=tmp
 
+	def getFilesFrom(self,nome):
+		files=Set()
+		nomes=nome.split("\s")
+		for t in nomes:
+			if self.tags.has_key(t):
+				for f in self.tags[t]:
+					files.add(f)
+
+		return files
+
 	def getCompativel(self, nome, hd):
 
 		for file in self.listaPicons:
@@ -189,7 +198,7 @@ class ProcessarCompativeisScreen(Screen):
 
 		tmpTags = Set(self.tags.keys())
 		# print "enviando tmpTags %d"%(len(tmpTags))
-		compativeis = list(self.getCompativeis(nome, tmpTags, Set(), hd))
+		compativeis = list(self.getCompativeis(nome, tmpTags, self.getFilesFrom(nome), hd))
 
 		# print "getCompativel: %d"%(len(compativeis))
 
@@ -203,12 +212,13 @@ class ProcessarCompativeisScreen(Screen):
 			if fileName.strip() == nome:
 				return [file]
 
-		# print "verifica quando sao dois"
 		if len(compativeis) == 2:
+			# print "verifica quando sao dois"
+			# print "%s - %s"%(compativeis[0][1],compativeis[1][1])
 			if len(re.split("\s", compativeis[0][1])) > len(re.split("\s", compativeis[1][1])):
-				return [compativeis[1]]
-			else:
 				return [compativeis[0]]
+			else:
+				return [compativeis[1]]
 
 		# print "tenta encontrar os compativeis"
 
@@ -242,7 +252,7 @@ class ProcessarCompativeisScreen(Screen):
 					sep = " "
 			# print "%s estah - %s" %(tmpNome, tmpNome in tmpTags)
 			if tmpNome in tmpTags:
-				# print "tmpArquivos - %d"%(len(tmpArquivos))
+				# print "tmpArquivos - %s"%(tmpArquivos)
 				if len(tmpArquivos)==0:
 					tmpArquivos = tmpArquivos.union(Set(self.tags[tmpNome]))
 					if not hd:
@@ -250,9 +260,9 @@ class ProcessarCompativeisScreen(Screen):
 				else:
 					tmpArquivos = self.filtrar(tmpArquivos, tmpNome, False)
 
-			# print "tmpArquivos - %d"%(len(tmpArquivos))
+			# print "tmpArquivos - %s"%(tmpArquivos)
 			tt = Set(self.getTags(tmpArquivos, hd))
-			# print "encontrei algo? %s"%(len(tt))
+			# print "encontrei algo? %s"%(tt)
 			return self.getCompativeis(novoNome, tt, tmpArquivos, hd)
 		else:
 			# print "terminou %d"%(len(tmpArquivos))

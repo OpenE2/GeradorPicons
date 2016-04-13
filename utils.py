@@ -1,6 +1,6 @@
 from Tools.Directories import resolveFilename, SCOPE_PLUGINS, SCOPE_CONFIG, SCOPE_SYSETC
 
-_version = "2.66"
+_version = "2.7"
 _plugindir = resolveFilename(SCOPE_PLUGINS, "Extensions/GeradorPicons")
 _developer = "gravatasufoca"
 _title = "Gerador de Picons - "+_version+" - "+_developer
