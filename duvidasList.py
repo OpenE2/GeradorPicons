@@ -127,8 +127,12 @@ class DuvidasPiconScreen(Screen):
 			else:
 				tp=str(int(transponder_info["frequency"])/1000)+ "H" if transponder_info["polarization"]==0 else "V"
 
+
+			# print x[0].split(":")[2]
+			print "%s - %s"%(x,x.toString())
+
 			hd = False
-			if x.type == 25:
+			if x.toString().split(":")[2] in ["19","25"]:
 				hd = True
 			nome = servicehandler.info(x).getName(x).lower()
 			if x and nome.endswith("hd"):

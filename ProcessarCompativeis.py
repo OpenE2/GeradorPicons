@@ -67,8 +67,10 @@ class ProcessarCompativeisScreen(Screen):
 
 				cabo = transponder_info["tuner_type"] == "DVB-C"
 
+				tipo = item[0].split(":")[2]
+
 				hd = False
-				if canal.type == 25:
+				if tipo in ["25","19"]:
 					hd = True
 				if cabo and (" hd" in nome or " hd " in nome):
 					hd = True
@@ -111,7 +113,7 @@ class ProcessarCompativeisScreen(Screen):
 		self.downloadTimer.start(1, True)
 
 	def atualizaProgresso(self):
-		chunck = self.response.iter_content(9216).next()
+		chunck = self.response.iter_content(9216*3).next()
 
 		self.recebido += len(chunck)
 		self.progress.value = self.recebido
@@ -172,7 +174,7 @@ class ProcessarCompativeisScreen(Screen):
 			canal = eServiceReference(item[0])
 			nome = servicehandler.info(canal).getName(canal).lower()
 
-			if canal.type != 2:
+			if item[0].split(":")[2] != "2":
 				if not re.match("\d+",nome) and not nome=="(...)":
 					tmp.append(item)
 
@@ -198,7 +200,7 @@ class ProcessarCompativeisScreen(Screen):
 
 		tmpTags = Set(self.tags.keys())
 		# print "enviando tmpTags %d"%(len(tmpTags))
-		compativeis = list(self.getCompativeis(nome, tmpTags, self.getFilesFrom(nome), hd))
+		compativeis = list(self.getCompativeis(nome, tmpTags, Set(), hd))
 
 		# print "getCompativel: %d"%(len(compativeis))
 

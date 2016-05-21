@@ -20,7 +20,7 @@ config.plugins.geradorpicon = ConfigSubsection()
 config.plugins.geradorpicon.tipo = ConfigSelection(default="", choices=[])
 
 config.plugins.geradorpicon.pasta = ConfigDirectory(default="/usr/share/enigma2/picon", visible_width=500)
-
+config.plugins.geradorpicon.porNome = ConfigYesNo(default=False)
 
 # Class EasyBouquetScreen
 class PrincipalScreen(ConfigListScreen, Screen):
@@ -133,6 +133,7 @@ class PrincipalScreen(ConfigListScreen, Screen):
 		self.list = []
 		self.list.append(getConfigListEntry(_("Diretório dos Picons"), config.plugins.geradorpicon.pasta))
 		self.list.append(getConfigListEntry("Modelo dos Picons", config.plugins.geradorpicon.tipo))
+		self.list.append(getConfigListEntry("Gerar Picons por nome?", config.plugins.geradorpicon.porNome))
 
 		self["config"].list = self.list
 		self["config"].setList(self.list)

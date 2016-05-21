@@ -76,7 +76,7 @@ class ProgressoGeradorScreen(Screen):
 				nome = servicehandler.info(canal).getName(canal).lower()
 				self.jobName.text = "Processando canal %s" % (nome)
 				if picon:
-					piconName = piconsDir + "/" + picon.getPiconName()
+					piconName = piconsDir + "/" + picon.getPiconByName() if config.plugins.geradorpicon.porNome.value else  picon.getPiconName()
 					self.jobTask.text = "Copiando arquivo..."
 
 					shutil.copy(picon.tmpPng,piconName)
