@@ -12,6 +12,7 @@ _urlModelo="https://dl.dropboxusercontent.com/u/12772101/geradorPicons/modelos.c
 _urlVersao="https://dl.dropboxusercontent.com/u/12772101/geradorPicons/enigma2-plugin-extensions-gerador-picons.ipk"
 _picoZipDir="/tmp/piconZip"
 
+
 screens=[]
 
 def addScreen(screen):
@@ -43,7 +44,7 @@ def getConfiguracoes():
 	for item in config.items("modelos"):
 		items.append((item[1],item[0]))
 
-	return {"items":items,"versao":config.get("versao","versao")}
+	return {"items":items,"versao":config.get("versao","versao"),"depara":config.get("depara","url")}
 
 def getPiconsZipped(url,callback=[]):
 	import requests, zipfile, StringIO
